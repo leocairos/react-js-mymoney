@@ -28,27 +28,32 @@ const init = baseURL => {
     const useGet = resource => {
         const [data, dispatch] = useReducer(reducer, INITIAL_STATE)
 
-        useEffect(() => {
+        const carregar = async () => {
             dispatch({ type: 'REQUEST' })
-            axios
-                .get(baseURL + resource + '.json')
-                .then(res => {
-                    dispatch({ type: 'SUCCESS', data: res.data })
-                })
+            const res = await axios.get(baseURL + resource + '.json')
+            dispatch({ type: 'SUCCESS', data: res.data })
+        }
+
+        useEffect(() => {
+            carregar()
         }, [resource])
-        return data
+
+        return {
+            ...data,
+            refetch: carregar
+        }
     }
 
     const usePost = resource => {
         const [data, dispatch] = useReducer(reducer, INITIAL_STATE)
 
-        const post = data => {
+        const post = async (data) => {
             dispatch({ type: 'REQUEST' })
-            axios
-                .post(baseURL + resource + '.json', data)
-                .then(res => {
-                    dispatch({ type: 'SUCCESS', data: res.data })
-                })
+            const res = await axios.post(baseURL + resource + '.json', data)
+            dispatch({
+                type: 'SUCCESS',
+                data: res.data
+            })
         }
         return [data, post]
     }
@@ -56,13 +61,12 @@ const init = baseURL => {
     const useDelete = () => {
         const [data, dispatch] = useReducer(reducer, INITIAL_STATE)
 
-        const remove = resource => {
+        const remove = async (resource) => {
             dispatch({ type: 'REQUEST' })
-            axios
-                .delete(baseURL + resource + '.json')
-                .then(res => {
-                    dispatch({ type: 'SUCCESS' })
-                })
+            await axios.delete(baseURL + resource + '.json')
+            dispatch({
+                type: 'SUCCESS'
+            })
         }
         return [data, remove]
     }
