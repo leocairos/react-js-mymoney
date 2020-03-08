@@ -92,4 +92,19 @@ const init = baseURL => {
     }
 }
 
+export const usePost = resource => {
+    const [data, dispatch] = useReducer(reducer, INITIAL_STATE)
+
+    const post = async (data) => {
+        dispatch({ type: 'REQUEST' })
+        const res = await axios.post(resource , data)
+        dispatch({
+            type: 'SUCCESS',
+            data: res.data
+        })
+        return res.data
+    }
+    return [data, post]
+}
+
 export default init
