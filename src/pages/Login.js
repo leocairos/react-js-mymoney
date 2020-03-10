@@ -17,7 +17,7 @@ const Login = () => {
     const login = async () => {
         await signin({
             email: 'leocairos@rdlsc.com',
-            password: 'abc123',
+            password: 'abc1234',
             returnSecureToken: true
         })
     }

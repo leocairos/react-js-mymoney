@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-
 import Rest from '../utils/rest'
+import { Redirect } from 'react-router-dom'
 
 const baseURL = 'https://mymoney-rjs.firebaseio.com/'
 const { useGet, usePost, useDelete, usePatch } = Rest(baseURL)
@@ -52,6 +52,10 @@ const Movimentacoes = ({ match }) => {
 
   const alterarPrevisaoSaida = (evt) => {
     patch(`meses/${match.params.data}`, { 'previsao_saida': evt.target.value })
+  }
+
+  if(data.error === 'Permission denied' ){
+    return <Redirect to='/login' />
   }
 
   return (
